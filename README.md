@@ -7,7 +7,7 @@
 In the command line, run:
 
 ```sh
-npm install grunt-assemble-toc --save-dev
+npm install grunt-assemble-toc-custom --save-dev
 ```
 
 Next, to register the plugin with Assemble in your project's Gruntfile you can either specify the direct path to the plugin(s) (e.g. `./path/to/plugins/*.js`), or if installed via npm, make sure the plugin is in the `devDependencies` of your project.js package.json, and simply add the module's name to the `plugins` option:
@@ -15,7 +15,7 @@ Next, to register the plugin with Assemble in your project's Gruntfile you can e
 ```js
 assemble: {
   options: {
-    plugins: ['grunt-assemble-toc', 'other/plugins/*.js']
+    plugins: ['grunt-assemble-toc-custom', 'other/plugins/*.js']
   }
 }
 ```
@@ -43,7 +43,7 @@ CSS class used in the wrapper `ul` for the table of contents.
 ```js
 assemble: {
   options: {
-    plugins: ['grunt-assemble-toc'],
+    plugins: ['grunt-assemble-toc-custom'],
     toc: {
       id: 'toc',
       modifier: ''
