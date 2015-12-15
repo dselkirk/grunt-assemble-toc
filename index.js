@@ -75,7 +75,9 @@ module.exports = function(params, callback) {
         toc.call($("[data-toc]"));
     });
 
-    $("#toc").toc();
+    if ($("#toc").length) {
+        $("#toc").toc();
+    }
 };
 
 module.exports.options = options;
