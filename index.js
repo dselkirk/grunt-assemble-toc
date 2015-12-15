@@ -1,3 +1,6 @@
+var options = {
+  stage: 'render:post:page'
+};
 
 var $ = require('jquery');
 module.exports = function(params, callback) {
