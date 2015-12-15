@@ -1,5 +1,5 @@
 {
-  "name": "grunt-toc",
+  "name": "grunt-toc-dselkirk",
   "description": "Plugin for adding a Table of Contents (TOC) to any HTML page.",
   "version": "0.1.8",
   "homepage": "http://github.com/dselkirk/grunt-assemble-toc.git",
