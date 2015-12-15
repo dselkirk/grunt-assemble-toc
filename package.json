@@ -1,7 +1,7 @@
 {
   "name": "grunt-toc-dselkirk",
   "description": "Plugin for adding a Table of Contents (TOC) to any HTML page.",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "homepage": "http://github.com/dselkirk/grunt-assemble-toc.git",
   "author": "Dennis Selkirk",
   "repository": {
@@ -26,7 +26,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "jquery": "2.1.4"
+    "cheerio": "0.19.0"
   },
   "keywords": [
     "table of contents",

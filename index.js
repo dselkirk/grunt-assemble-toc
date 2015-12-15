@@ -1,15 +1,16 @@
 var options = {
   stage: 'render:post:page'
 };
-
-var $ = require('jquery');
+var cheerio = require('cheerio');
 module.exports = function(params, callback) {
   'use strict';
+
+    var $ = cheerio.load(params.content);
 
   var toc = function (options) {
         return this.each(function () {
             var root = $(this),
-                data = root.data(),
+                data = root.data() || {},
                 thisOptions,
                 stack = [root], // The upside-down stack keeps track of list elements
                 listTag = this.tagName,
@@ -61,23 +62,11 @@ module.exports = function(params, callback) {
                 currentLevel = level;
             });
         });
-    }, old = $.fn.toc;
-
-    $.fn.toc = toc;
-
-    $.fn.toc.noConflict = function () {
-        $.fn.toc = old;
-        return this;
     };
 
-    // Data API
-    $(function () {
-        toc.call($("[data-toc]"));
-    });
-
-    if ($("#toc").length) {
-        $("#toc").toc();
-    }
+    $.prototype.toc = toc;
+    
+    $("#toc").toc();
 };
 
 module.exports.options = options;
