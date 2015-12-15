@@ -1,87 +1,77 @@
-# grunt-assemble-toc [![NPM version](https://badge.fury.io/js/grunt-assemble-toc.svg)](http://badge.fury.io/js/grunt-assemble-toc)
+# Table of Contents jQuery Plugin - jquery.toc
 
-> Assemble middleware for adding a Table of Contents (TOC) to any HTML page.
+A minimal, tiny jQuery plugin that will generate a table of contents, drawing from headings on the
+page.
 
-## Quickstart
+The generated TOCs are semantic, nested lists (`ul` or `ol`) with hash-link anchors to the headings.
 
-In the command line, run:
+## Usage
 
-```sh
-npm install grunt-assemble-toc-custom --save-dev
-```
+You can [download the latest release](http://ndabas.github.com/toc/assets/jquery.toc.zip), or
+install with Twitter's [Bower](http://twitter.github.com/bower): `bower install jquery.toc`.
 
-Next, to register the plugin with Assemble in your project's Gruntfile you can either specify the direct path to the plugin(s) (e.g. `./path/to/plugins/*.js`), or if installed via npm, make sure the plugin is in the `devDependencies` of your project.js package.json, and simply add the module's name to the `plugins` option:
+Include jQuery (>= 1.6) and jquery.toc.js/jquery.toc.min.js on your page. The plugin can then be
+used either via HTML5 data attributes, or via the programmatic API. See below for the available
+options.
 
-```js
-assemble: {
-  options: {
-    plugins: ['grunt-assemble-toc-custom', 'other/plugins/*.js']
-  }
-}
-```
+### Via data attributes
 
-Visit the [plugins docs](http://assemble.io/plugins/) for more info or for help getting started.
+Minimal example:
 
-## Options
+    <ul data-toc></ul>
 
-## toc
+With options:
 
-Type: `String`
-Default: `'toc'`
+    <ol data-toc="div.container" data-toc-headings="h2,h3,h4"></ol>
 
-Tag to determine where the table of contents is located
+### Via the JavaScript programmatic API
 
-## modifier
+Minimal example:
 
-Type: `String`
-Default: `''`
+    <ul id="toc"></ul>
+    ...
+    <script type="text/javascript">
+        $("#toc").toc();
+    </script>
 
-CSS class used in the wrapper `ul` for the table of contents.
+With options:
 
-## Usage Examples
+    <ul id="toc"></ul>
+    ...
+    <script type="text/javascript">
+        $("#toc").toc({content: "div.container", headings: "h2,h3,h4"});
+    </script>
 
-```js
-assemble: {
-  options: {
-    plugins: ['grunt-assemble-toc-custom'],
-    toc: {
-      id: 'toc',
-      modifier: ''
-    }
-  }
-}
-```
+### Options
 
-## Assemble plugins
+    <ul data-toc="content" data-toc-headings="headings"></ul>
 
-* [grunt-assemble](https://www.npmjs.com/package/grunt-assemble): Static site generator for Grunt.js, Yeoman and Node.js. Used by Zurb Foundation, Zurb Ink, H5BP/Effeckt,… [more](https://www.npmjs.com/package/grunt-assemble) | [homepage](http://assemble.io)
-* [grunt-assemble-anchors](https://www.npmjs.com/package/grunt-assemble-anchors): Assemble plugin for creating anchor tags from headings in generated html using Cheerio.js. | [homepage](https://github.com/assemble/grunt-assemble-anchors)
-* [grunt-assemble-contextual](https://www.npmjs.com/package/grunt-assemble-contextual): Generates a JSON file with the context of each page. Basic plugin to help see… [more](https://www.npmjs.com/package/grunt-assemble-contextual) | [homepage](https://github.com/assemble/grunt-assemble-contextual)
-* [grunt-assemble-decompress](https://www.npmjs.com/package/grunt-assemble-decompress): Assemble plugin for extracting zip, tar and tar.gz archives. | [homepage](https://github.com/assemble/grunt-assemble-decompress)
-* [grunt-assemble-download](https://www.npmjs.com/package/grunt-assemble-download): Assemble plugin for downloading files from GitHub. | [homepage](https://github.com/assemble/grunt-assemble-download)
-* [grunt-assemble-i18n](https://www.npmjs.com/package/grunt-assemble-i18n): Plugin for adding i18n support to Assemble projects. | [homepage](https://github.com/assemble/grunt-assemble-i18n)
-* [grunt-assemble-lunr](https://www.npmjs.com/package/grunt-assemble-lunr): Assemble plugin for adding search capabilities to your static site, with lunr.js. | [homepage](http://assemble.io)
-* [grunt-assemble-navigation](https://www.npmjs.com/package/grunt-assemble-navigation): Assemble navigation plugin. Automatically generate Bootstrap-style, multi-level side nav. See the sidenav on assemble.io for… [more](https://www.npmjs.com/package/grunt-assemble-navigation) | [homepage](https://github.com/assemble/grunt-assemble-navigation)
-* [grunt-assemble-permalinks](https://www.npmjs.com/package/grunt-assemble-permalinks): Permalinks plugin for Assemble, the static site generator for Grunt.js, Yeoman and Node.js. This plugin… [more](https://www.npmjs.com/package/grunt-assemble-permalinks) | [homepage](https://github.com/assemble/grunt-assemble-permalinks)
-* [grunt-assemble-sitemap](https://www.npmjs.com/package/grunt-assemble-sitemap): Sitemap plugin for Assemble | [homepage](http://assemble.io/plugins)
-* [grunt-assemble-wordcount](https://www.npmjs.com/package/grunt-assemble-wordcount): Assemble plugin for displaying wordcount and average reading time to blog posts or pages. | [homepage](https://github.com/assemble/grunt-assemble-wordcount)
+    $(...).toc({content: "body", headings: "h1,h2,h3"});
 
-## Contributing
+The plugin has two options:
 
-Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/assemble/grunt-assemble-toc/issues/new).
+* `content` is a selector where the plugin will look for headings to build up the TOC. The default
+  value is `"body"`.
+* `headings` is a string with a comma-separated list of selectors to be used as headings, in the
+  order which defines their relative hierarchy level. The default value of `"h1,h2,h3"` will select
+  all `h1`, `h2`, and `h3` elements to build the TOC, with `h1` being a level 1, `h2` a level 2, and
+  so on. You can use any valid list of jQuery selectors; for example, if you just want `h1` tags
+  with a specific class, and no `h3` tags, you could use `"h1.title,h2"` for this parameter.
 
-## Author
+In addition, the plugin will create nested lists of the same type (`ul` or `ol`) as the element that
+it is called on.
 
-**Brian Woodward**
+### Automatic ID generation
 
-+ [github/assemble](https://github.com/assemble)
-+ [twitter/assemble](http://twitter.com/assemble)
+The plugin generates hash-links to the headings on the page, to allow users to jump to the heading
+by clicking in the generated table of contents. This feature requires that the headings have IDs
+assigned; if they do not, the plugin will generate and assign IDs automatically.
 
-## License
+The generated IDs are based on the text inside the headings, and uses two simple rules:
 
-Copyright © 2015 Brian Woodward
-Released under the MIT license.
+* The ID must begin with a letter; so any non-letter (`[^A-Za-z]`) characters are discarded from the
+  beginning of the string.
+* For the rest of the ID, only letters and numbers are used from the heading text; all other
+  characters (`[^A-Za-z0-9]`) are converted to underscores.
 
-***
-
-_This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on September 25, 2015._
+For example, a heading like `<h2>Heading 2.1</h2>` will get the ID `Heading_2_1`.

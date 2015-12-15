@@ -1,9 +1,9 @@
 {
-  "name": "grunt-assemble-toc-custom",
-  "description": "Assemble middleware for adding a Table of Contents (TOC) to any HTML page.",
-  "version": "0.1.6",
-  "homepage": "http://assemble.io",
-  "author": "Brian Woodward (http://github.com/assemble)",
+  "name": "grunt-toc",
+  "description": "Plugin for adding a Table of Contents (TOC) to any HTML page.",
+  "version": "0.1.8",
+  "homepage": "http://github.com/dselkirk/grunt-assemble-toc.git",
+  "author": "Dennis Selkirk",
   "repository": {
     "type": "git",
     "url": "git://github.com/dselkirk/grunt-assemble-toc.git"
@@ -26,32 +26,16 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "cheerio": "~0.15.0"
+    "jquery": "2.1.4"
   },
   "keywords": [
-    "assemble",
-    "assemblemiddleware",
-    "assembleplugin",
-    "middleware",
-    "plugin",
     "table of contents",
     "toc"
   ],
   "verb": {
     "related": {
       "list": [
-        "grunt-assemble",
-        "grunt-assemble-anchors",
-        "grunt-assemble-contextual",
-        "grunt-assemble-decompress",
-        "grunt-assemble-download",
-        "grunt-assemble-i18n",
-        "grunt-assemble-lunr",
-        "grunt-assemble-navigation",
-        "grunt-assemble-permalinks",
-        "grunt-assemble-sitemap",
-        "grunt-assemble-toc",
-        "grunt-assemble-wordcount"
+        "grunt-assemble-toc"
       ]
     }
   }

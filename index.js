@@ -1,54 +1,78 @@
-/*!
- * grunt-assemble-toc <git://github.com/assemble/grunt-assemble-toc.git>
- *
- * Copyright (c) 2013-2015, Brian Woodward.
- * Licensed under the MIT License.
- */
 
-var options = {
-  stage: 'render:post:page'
-};
-
-var cheerio = require('cheerio');
-
-/**
- * Anchor Plugin
- * @param  {Object}   params
- * @param  {Function} callback
- */
+var $ = require('jquery');
 module.exports = function(params, callback) {
   'use strict';
 
-  var opts = params.assemble.options;
-  opts.toc = opts.toc || {};
+  var toc = function (options) {
+        return this.each(function () {
+            var root = $(this),
+                data = root.data(),
+                thisOptions,
+                stack = [root], // The upside-down stack keeps track of list elements
+                listTag = this.tagName,
+                currentLevel = 0,
+                headingSelectors;
 
-  // id to use to append TOC
-  var id = '#' + (opts.toc.id || 'toc');
-  var modifier = opts.toc.modifier || '';
-  var li = opts.toc.li ? (' class="' + opts.toc.li + '"') : '';
+            // Defaults: plugin parameters override data attributes, which override our defaults
+            thisOptions = $.extend(
+                {content: ".js-content", headings: "h1,h2,h3, h4"},
+                {content: data.toc || undefined, headings: data.tocHeadings || undefined},
+                options
+            );
+            headingSelectors = thisOptions.headings.split(",");
 
-  // load current page content
-  var $ = cheerio.load(params.content);
-  var toc = cheerio.load('<ul id="toc-list" class="' + modifier + '"></ul>');
+            // Set up some automatic IDs if we do not already have them
+            $(thisOptions.content).find(thisOptions.headings).attr("id", function (index, attr) {
+                // Generate a valid ID: must start with a letter, and contain only letters and
+                // numbers. All other characters are replaced with underscores.
+                return attr ||
+                    $(this).text().replace(/^[^A-Za-z]*/, "").replace(/[^A-Za-z0-9]+/g, "_");
+            }).each(function () {
+                // What level is the current heading?
+                var elem = $(this), level = $.map(headingSelectors, function (selector, index) {
+                    return elem.is(selector) ? index : undefined;
+                })[0];
 
-  // get all the anchor tags from inside the headers
-  var anchors = $('h1 a[name],h2 a[name],h3 a[name],h4 a[name]');
-  anchors.map(function(i, e) {
-    var text  = $(e.parent).text().trim();
-    var link  = e.attribs.name
-    var depth = parseInt(e.parent.name.replace(/h/gi, ''), 10);
+                if (level > currentLevel) {
+                    // If the heading is at a deeper level than where we are, start a new nested
+                    // list, but only if we already have some list items in the parent. If we do
+                    // not, that means that we're skipping levels, so we can just add new list items
+                    // at the current level.
+                    // In the upside-down stack, unshift = push, and stack[0] = the top.
+                    var parentItem = stack[0].children("li:last")[0];
+                    if (parentItem) {
+                        stack.unshift($("<" + listTag + "/>").appendTo(parentItem));
+                    }
+                } else {
+                    // Truncate the stack to the current level by chopping off the 'top' of the
+                    // stack. We also need to preserve at least one element in the stack - that is
+                    // the containing element.
+                    stack.splice(0, Math.min(currentLevel - level, Math.max(stack.length - 1, 0)));
+                }
 
-    var arr = new Array(depth);
-    var level = arr.join('<li><ul>') + '<li><a href="#' + link + '">' + text + '</a></li>' + arr.join('</ul></li>');
-    toc('#toc-list').append(level);
-  });
-  $(id).append(toc.html()
-       .replace(/(<li>\s*<ul>\s*)+/g, '<li><ul>')
-       .replace(/(<\/ul>\s*<\/li>\s*)+/g, '</ul></li>')
-       .replace( /(<\/li>\s*<\/ul>\s*<\/li>\s*<li>\s*<ul>\s*<li>)/g, '</li><li>'));
+                // Add the list item
+                $("<li/>").appendTo(stack[0]).append(
+                    $("<a/>").text(elem.text()).attr("href", "#" + elem.attr("id"))
+                );
 
-  params.content = $.html();
-  callback();
+                currentLevel = level;
+            });
+        });
+    }, old = $.fn.toc;
+
+    $.fn.toc = toc;
+
+    $.fn.toc.noConflict = function () {
+        $.fn.toc = old;
+        return this;
+    };
+
+    // Data API
+    $(function () {
+        toc.call($("[data-toc]"));
+    });
+
+    $("#toc").toc();
 };
 
 module.exports.options = options;
